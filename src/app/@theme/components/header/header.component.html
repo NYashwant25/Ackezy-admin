@@ -1,0 +1,31 @@
+<div class="main-header">
+    <!-- Logo Header -->
+    <div class="logo-header" data-background-color="white">
+        <a [routerLink]="['/dashboard']" class="logo">
+            <img src="assets/img/logo_small.png" alt="navbar brand" class="navbar-brand" width="20%">
+        </a>
+        <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleSidebar()">
+            <span class="navbar-toggler-icon">
+                <i class="icon-menu"></i>
+            </span>
+        </button>
+        <button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
+        <div class="nav-toggle" (click)="toggleSidebar()">
+            <button class="btn btn-toggle toggle-sidebar" [ngClass]="{'toggled': sidebarToggle}">
+                <i class="icon-menu"></i>
+            </button>
+        </div>
+    </div>
+    <!-- End Logo Header -->
+    <!-- Navbar Header -->
+    <nav class="navbar navbar-header navbar-expand-lg" data-background-color="purple">
+        <div class="container-fluid">
+            <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                <!--    <app-notification-dropdown>
+                </app-notification-dropdown> -->
+                <app-profile-dropdown></app-profile-dropdown>
+            </ul>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+</div>

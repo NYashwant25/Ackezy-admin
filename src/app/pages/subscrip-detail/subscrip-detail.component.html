@@ -1,0 +1,149 @@
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">{{title}}</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a routerLink="/dashboard">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a>{{ title }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row p-2 filter-cont mb-4">
+                        <div class="ml-auto">
+                            <button class="btn btn-secondary btn-round" id="addModalOpen" (click)="createData(editModal)">
+                                <i class="fa fa-plus"></i>
+                                &nbsp;&nbsp;&nbsp;Subscribe Company
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="record-table" [dtOptions]="dtOptions" datatable class="display table table-striped table-hover w-100 table-head-bg-secondary" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Subscription Start Date</th>
+                                        <th>Subscription End Date</th>
+                                        <th>Subscription Status</th>
+                                        <!-- <th>Action</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="subscriptionlist?.length != 0">
+                                    <tr *ngFor="let data of subscriptionlist">
+                                        <td>{{ data.name | capitalize}}</td>
+                                        <td>{{ data.email | capitalize}}</td>
+                                        <td>{{ data.subscriptionStart | date}}</td>
+                                        <td>{{ data.subscriptionEnd | date}}</td>
+                                        <td>{{ data.subscriptionStatus | capitalize}}</td>
+                                        <!-- <td>
+                                            <div class="btn-group datatable-dropdown">
+                                                <button class="btn btn-link btn-secondary" (click)="editDetail(editModal,data._id)"><i class="fa fa-edit"></i></button>
+                                                <button class="btn btn-link btn-danger" (click)="deleteConfirmation(data._id)"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </td> -->
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="subscriptionlist?.length == 0">
+                                    <tr>
+                                        <td colspan="9" class="no-data-available text-center">No matching records found</td>
+                                    </tr>
+                                <tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal -->
+<ng-template #editModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{ editing ? "Edit" : "Add" }} Subscription</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="row form" *ngIf="requestDetail" #subForm="ngForm" novalidate>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">Company</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="companyId" required [(ngModel)]="subscripData.companyId" #companyId="ngModel" [items]="companyList" bindLabel="name" [clearable]="false" bindValue="_id" placeholder="Company"></ng-select>
+                                <div *ngIf="companyId.invalid && (companyId.dirty || companyId.touched)">
+                                    <label class="error">Company is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label class="text-secondary">StartDate</label>
+                                <input type="text" disabled name="subscriptionstartDate" required [(ngModel)]="subscripData.subscriptionstartDate" #subscriptionstartDate="ngModel" class="form-control" placeholder="StartDate..">
+                                <div *ngIf="subscriptionstartDate.invalid && (subscriptionstartDate.dirty || subscriptionstartDate.touched)">
+                                    <label class="error">Start Date is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label class="text-secondary">Period</label>
+                                <input type="text" name="Period" disabled required [(ngModel)]="subscripData.Period" #Period="ngModel" class="form-control" placeholder="StartDate..">
+                                <div *ngIf="Period.invalid && (Period.dirty || Period.touched)">
+                                    <label class="error">Period is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">Subscription</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="subscriptionId" required [(ngModel)]="subscripData.subscriptionId" #subscriptionId="ngModel" (change)="typeChange(subscripData.subscriptionId)" [items]="subscrptionList" bindLabel="name" [clearable]="false" bindValue="_id" placeholder="Subscription"></ng-select>
+                                <div *ngIf="subscriptionId.invalid && (subscriptionId.dirty || subscriptionId.touched)">
+                                    <label class="error">Subscription is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label class="text-secondary">End Date</label>
+                                <input disabled type="text" name="subscriptionendDate" required [(ngModel)]="subscripData.subscriptionendDate" #subscriptionendDate="ngModel" class="form-control" placeholder="End Date..">
+                                <div *ngIf="subscriptionendDate.invalid && (subscriptionendDate.dirty || subscriptionendDate.touched)">
+                                    <label class="error">End Date is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label class="text-secondary">Amount</label>
+                                <input type="number" name="amount" required [(ngModel)]="subscripData.amount" #amount="ngModel" class="form-control" placeholder="Amount">
+                                <div *ngIf="amount.invalid && (amount.dirty || amount.touched)">
+                                    <label class="error">Amount is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark btn-rounded" (click)='setform(subForm)' (click)="modal.close('Close click')">Close</button>
+                    <app-submit-button [submitted]="submitted" (click)="addEditSubs(subForm)">{{editing? "Update" : "Add" }}</app-submit-button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

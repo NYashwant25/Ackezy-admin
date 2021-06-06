@@ -1,0 +1,43 @@
+<li class="nav-item dropdown hidden-caret" [ngClass]="{'show': visibility}">
+    <a class="nav-link dropdown-toggle" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-bell"></i>
+        <span class="notification">{{ notificationCount }}</span>
+    </a>
+    <ul class="dropdown-menu messages-notif-box animated fadeIn" aria-labelledby="messageDropdown" [ngClass]="{'show': visibility}">
+        <li>
+            <div class="dropdown-title d-flex justify-content-between align-items-center">
+                Notifications
+                <!-- <a [routerLink]="'/notification/list'" class="small">Mark all as read</a> -->
+            </div>
+        </li>
+        <li>
+            <div *ngIf="notification.length !== 0; else notFound" class="message-notif-scroll scrollbar-outer" [perfectScrollbar]>
+                <div class="notif-center">
+                    <a (click)="redirectTo(notify._id)" *ngFor="let notify of notification" routerLinkActive="router-link-active">
+                        <div class="notif-img">
+                            <i class="fa fa-user notIcon" alt="Img Profile" *ngIf="!notify.profilepic; else showImg"></i>
+                            <ng-template #showImg>
+                                <img [src]="notify.profilePic" alt="Img Profile">
+                            </ng-template>
+                        </div>
+                        <div class="notif-content">
+                            <span class="subject">{{ notify.title | capitalize }}</span>
+                            <span class="block">
+                                {{ notify.message}}
+                            </span>
+                            <!-- <span class="time">5 minutes ago</span> -->
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <ng-template #notFound>
+                <div class="notfound-content">
+                    No new notifications
+                </div>
+            </ng-template>
+        </li>
+        <li>
+            <!-- <a class="see-all" [routerLink]="['/notification/list']" routerLinkActive="router-link-active">See all messages<i class="fa fa-angle-right"></i> </a> -->
+        </li>
+    </ul>
+</li>

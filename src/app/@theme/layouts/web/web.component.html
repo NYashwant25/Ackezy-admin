@@ -1,0 +1,12 @@
+<div class="wrapper" [ngClass]="{'sidebar_minimize': sidebarToggle}">
+    <app-header></app-header>
+    <!-- Sidebar -->
+    <app-side-menu></app-side-menu>
+    <!-- End Sidebar -->
+    <div class="main-panel">
+        <div class="content">
+            <ng-content></ng-content>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</div>

@@ -1,0 +1,272 @@
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">{{title}}</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a routerLink="/dashboard">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a>{{ title }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row p-2 filter-cont mb-4">
+                        <div class="col-md-2 pl-0">
+                            <div class="form-group pt-0">
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" (change)="setDate()" name="dayselect1" [(ngModel)]="dayselect" #dayselect1="ngModel" [items]="dayslist" bindLabel="name" [clearable]="false" bindValue="value" placeholder="Select Days"></ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pl-0">
+                            <div class="form-group pt-0">
+                                <label>Start Date &nbsp; &nbsp;</label>
+                                <input type="date" id="start" [(ngModel)]="startDate" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 pl-0">
+                            <div class="form-group pt-0">
+                                <label>End Date &nbsp; &nbsp;</label>
+                                <input type="date" [(ngModel)]="endDate" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 pl-0">
+                            <div class="form-group pt-0">
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" [items]="categoryList" bindLabel="name" name="catselect1" required [(ngModel)]="catselect" #catselect1="ngModel" [clearable]="false" bindValue="_id" placeholder="Category"></ng-select>
+                            </div>
+                        </div>
+                        <div class="">
+                            <button class="btn btn-secondary btn-round" (click)="filterDate()">
+                                Filter Data
+                            </button>
+                        </div>
+                        &nbsp;
+                        <div class="">
+                            <button class="btn btn-secondary btn-round" (click)="exportexcel()">
+                                Download Excel
+                            </button>
+                        </div>
+                        <div class="ml-auto">
+                            <button class="btn btn-secondary btn-round" id="addModalOpen" (click)="createData(editModal)">
+                                <i class="fa fa-plus"></i>
+                                &nbsp;&nbsp;&nbsp;Add Document
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="record-table" [dtOptions]="dtOptions" datatable class="display table table-striped table-hover w-100 table-head-bg-secondary" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>From User</th>
+                                    <th>To User</th>
+                                    <th>Doc Status</th>
+                                    <th>Number</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="documentList?.length != 0">
+                                <tr *ngFor="let data of documentList">
+                                    <td>{{ data.name | capitalize }}</td>
+                                    <td>{{ data.typeId.name | capitalize}}</td>
+                                    <td>{{ data.fromUser.firstName | capitalize}}</td>
+                                    <td>{{ data.toUser.firstName | capitalize}}</td>
+                                    <td>{{ data.status | capitalize }}</td>
+                                    <td>{{ data.number | capitalize }}</td>
+                                    <td>{{ data.categoryName | capitalize }}</td>
+                                    <td>
+                                        <span class="badge badge-pill badge-success" *ngIf="data.IsActive == 1">Active</span>
+                                        <span class="badge badge-pill badge-warning" *ngIf="data.IsActive == 0">Inactive</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group datatable-dropdown">
+                                            <button class="btn btn-link btn-secondary" (click)="editDetail(editModal,data._id)"><i class="fa fa-edit"></i></button>
+                                            <button class="btn btn-link btn-danger" (click)="deleteConfirmation(data._id)"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-round btn-secondary" (click)="openDelivererModel(delivererModal,data._id,'delivererVar')">Deliverer</button>
+                                            <button class="btn btn-round btn-secondary" (click)="openDelivererModel(delivererModal,data._id,'tagVar')">Tag</button>
+                                            <button class="btn btn-round btn-secondary" (click)="openDelivererModel(delivererModal,data._id,'delegateVar')">Delegate</button>
+                                            <!--  <button class="btn btn-link btn-secondary"><i class="fa fa-male"></i></button>
+                                                <button class="btn btn-link btn-secondary"><i class="fa fa-users"></i></button> -->
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="documentList?.length == 0">
+                                <tr>
+                                    <td colspan="8" class="no-data-available text-center">No matching records found</td>
+                                </tr>
+                            <tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal -->
+<ng-template #editModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{ editing ? "Edit" : "Add" }} Document</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="row form" *ngIf="requestDetail" id="docForm" #docForm="ngForm" novalidate>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label class="text-secondary">Name</label>
+                                <input type="text" name="name" required [(ngModel)]="documentData.name" #name="ngModel" class="form-control" placeholder="Name">
+                                <div *ngIf="name.invalid && (name.dirty || name.touched)">
+                                    <label class="error">name is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">From User</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="fromUser" required [(ngModel)]="documentData.fromUser" #fromUser="ngModel" [items]="userList" bindLabel="firstName" [clearable]="false" bindValue="_id" placeholder="User"></ng-select>
+                                <div *ngIf="fromUser.invalid && (fromUser.dirty || fromUser.touched)">
+                                    <label class="error">From User is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label class="text-secondary">Number</label>
+                                <input type="text" name="number" required [(ngModel)]="documentData.number" #number="ngModel" class="form-control" placeholder="Number">
+                                <div *ngIf="number.invalid && (number.dirty || number.touched)">
+                                    <label class="error">number is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">Catogory</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" [items]="categoryList" bindLabel="name" name="categoryId" required [(ngModel)]="documentData.categoryId" #categoryId="ngModel" [clearable]="false" bindValue="_id" placeholder="Category"></ng-select>
+                                <div *ngIf="categoryId.invalid && (categoryId.dirty || categoryId.touched)">
+                                    <label class="error">categoryId is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">Status</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="IsActive" required [(ngModel)]="documentData.IsActive" #IsActive="ngModel" [items]="statusData" bindLabel="name" [clearable]="false" bindValue="id" placeholder="Status"></ng-select>
+                                <div *ngIf="IsActive.invalid && (IsActive.dirty || IsActive.touched)">
+                                    <label class="error">status is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">Type</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="typeId" required [(ngModel)]="documentData.typeId" #typeId="ngModel" [items]="typelist" bindLabel="name" [clearable]="false" bindValue="_id" placeholder="Type.."></ng-select>
+                                <div *ngIf="typeId.invalid && (typeId.dirty || typeId.touched)">
+                                    <label class="error">Type is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">To User</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="toUser" required [(ngModel)]="documentData.toUser" #toUser="ngModel" [items]="userList" bindLabel="firstName" [clearable]="false" bindValue="_id" placeholder="User"></ng-select>
+                                <div *ngIf="toUser.invalid && (toUser.dirty || toUser.touched)">
+                                    <label class="error">To User is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">Document Status</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" [items]="DocstatusData" bindLabel="name" name="status" required [(ngModel)]="documentData.status" #status="ngModel" [clearable]="false" bindValue="id" placeholder="Document Status"></ng-select>
+                                <div *ngIf="status.invalid && (status.dirty || status.touched)">
+                                    <label class="error">documetn status is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">Company</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="companyId" [(ngModel)]="documentData.companyId" #companyId="ngModel" [items]="companyList" bindLabel="name" [clearable]="false" bindValue="_id" placeholder="Company"></ng-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark btn-rounded" (click)="modal.close('Close click')">Close</button>
+                    <app-submit-button [submitted]="submitted" (click)="updateRequest(docForm)">{{editing? "Update" : "Add" }}</app-submit-button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<!-- Deliverer Modal -->
+<ng-template #delivererModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" *ngIf="delivererVar">Add Deliverer</h4>
+        <h4 class="modal-title" *ngIf="tagVar">Add Tagging</h4>
+        <h4 class="modal-title" *ngIf="delegateVar">Add Delegate</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="row form" *ngIf="requestDetail">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12" *ngIf="delivererVar">
+                        <div class="form-group form-group-default dropdown">
+                            <label class="text-secondary">Select User</label>
+                            <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="deliver" required [(ngModel)]="deliverer" #deliver="ngModel" [items]="userList" bindLabel="firstName" [clearable]="false" bindValue="_id" placeholder="User"></ng-select>
+                            <div *ngIf="deliver.invalid && (deliver.dirty || deliver.touched)">
+                                <label class="error">User is Required</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" *ngIf="tagVar">
+                        <div class="form-group form-group-default dropdown">
+                            <label class="text-secondary">Select User</label>
+                            <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="teg" required [(ngModel)]="tag" #teg="ngModel" [items]="userList" bindLabel="firstName" [clearable]="false" bindValue="_id" placeholder="User"></ng-select>
+                            <div *ngIf="teg.invalid && (teg.dirty || teg.touched)">
+                                <label class="error">User is Required</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" *ngIf="delegateVar">
+                        <div class="form-group form-group-default dropdown">
+                            <label class="text-secondary">Select User</label>
+                            <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="delegat" required [(ngModel)]="delegate" #delegat="ngModel" [items]="userList" bindLabel="firstName" [clearable]="false" bindValue="_id" placeholder="User"></ng-select>
+                            <div *ngIf="delegat.invalid && (delegat.dirty || delegat.touched)">
+                                <label class="error">User is Required</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark btn-rounded" (click)="modal.close('Close click')">Close</button>
+                    <app-submit-button [submitted]="submitted" (click)="addDeliverer()">{{editing? "Update" : "Add" }}</app-submit-button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

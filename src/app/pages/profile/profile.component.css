@@ -1,0 +1,31 @@
+.show-password {
+    position: absolute;
+    right: 35px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+form .form-group.dropdown {
+    overflow: visible;
+}
+
+.avatar-img {
+    width: 160%;
+    height: 160%;
+    bottom: 10px;
+    position: relative;
+    bottom: 10px;
+}
+
+img.avatar-img.rounded-circle {
+    border: 2px solid;
+}
+
+.sub-text {
+    color: #444;
+    font-size: 14px;
+    font-weight: 600;
+}

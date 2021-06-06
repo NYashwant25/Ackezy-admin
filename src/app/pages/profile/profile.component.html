@@ -1,0 +1,234 @@
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">{{title}}</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="#">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/dashboard']">Dashboard</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">{{ title }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-with-nav">
+                <div class="card-header">
+                    <div class="row row-nav-line">
+                        <ul class="nav nav-tabs nav-line nav-color-secondary" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link " [ngClass]="{ active: profileVisible,  show: profileVisible }" data-toggle="tab" (click)="togglePassword(1)" role="tab" aria-selected="false">
+                                    Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" [ngClass]="{ active: passwordVisible,  show: passwordVisible }" data-toggle="tab" (click)="togglePassword(2)" role="tab" aria-selected="false">Change Password</a>
+                            </li>
+                            <!--  <li class="nav-item">
+                                <a class="nav-link" [ngClass]="{ active: subVisible,  show: subVisible }" data-toggle="tab" (click)="togglePassword(3)" role="tab" aria-selected="false">Subscription</a>
+                            </li> -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body ">
+                    <div class="tab-content">
+                        <div class="tab-pane fade " [ngClass]="{ active: profileVisible,  show: profileVisible }" id="profile-tab" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                            <form class="row" id="profileForm" enctype="multipart/form-data" [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
+                                <div class="col-md-5 offset-md-2">
+                                    <div class="row mt-3" style="margin-bottom: 2rem !important;">
+                                        <div class="col-md-12" style="display: flex;">
+                                            <!-- <div *ngIf="filePreviewPath == null" class="avatar-sm">
+                                                <img src="{{ user.profilePic | baseURL }}" onError="this.src='../assets/img/icons8-user-male-52.png';" alt="Profile" class="avatar-img rounded-circle">
+                                            </div>
+                                            <div *ngIf="filePreviewPath" class="avatar-sm">
+                                                <img src={{filePreviewPath}} alt="Profile" class="avatar-img rounded-circle">
+                                            </div> -->
+                                            <!--  <input type="file" accept="image/*" [hidden]="true" id="file" (change)="onFileSelected($event)">
+                                            <label for="file" style="color: #520701 !important;font-weight: 600;
+                                            cursor: pointer;align-items: center;margin-left: 45px;
+                                            display: inline-flex;">
+                                                Change profile image<br>
+                                                <small *ngIf="imageError" style="color: red !important;">please choose image
+                                                </small>
+                                            </label> -->
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <label>First Name</label>
+                                                <input type="text" [attr.maxlength]="validator.name.max" class="form-control alpha-space" formControlName="firstName" placeholder="Name">
+                                                <div *ngIf="submitted && f.firstName.errors">
+                                                    <error-label *ngIf="f.firstName.errors.required" [control]="f.firstName"></error-label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <label>Last Name</label>
+                                                <input type="text" [attr.maxlength]="validator.name.max" class="form-control alpha-space" formControlName="lastName" placeholder="Name">
+                                                <div *ngIf="submitted && f.lastName.errors">
+                                                    <error-label *ngIf="f.lastName.errors.required" [control]="f.lastName"></error-label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <label>Email</label>
+                                                <input type="email" class="form-control" formControlName="email" placeholder="Name" value="" [attr.maxlength]="validator.email.max">
+                                                <div *ngIf="submitted && f.email.errors">
+                                                    <error-label *ngIf="f.email.errors.required" [control]="f.email"></error-label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mt-3">
+                                            <div class="form-group form-group-default dropdown">
+                                                <label>Phone</label>
+                                                <div class="row">
+                                                    <!-- <div class="col-md-4">
+                                                        <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" [clearable]="false" formControlName="tel" [items]="countryList | async" bindLabel="tel" bindValue="_id"></ng-select>
+                                                    </div> -->
+                                                    <div class="col-md-8">
+                                                        <input type="text" formControlName="mobileNo" [attr.maxlength]="validator.phone.max" class="form-control digit-only" digitOnly>
+                                                    </div>
+                                                </div>
+                                                <label class="error" *ngIf="(submitted  && f.mobileNo.errors) || (submitted && f.mobileNo.errors)"> Please enter a value
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mt-3 mb-3 col-md-12">
+                                            <app-submit-button [submitted]="button">Update Profile</app-submit-button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-3 offset-md-2">
+                                    <div class="text-right mt-3 mb-3">
+                                        <app-submit-button [submitted]="submitted">Update Profile</app-submit-button>
+                                    </div>
+                                </div> -->
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" [ngClass]="{ active: passwordVisible,  show: passwordVisible }" id="password-tab" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                            <div class="row">
+                                <form class="col-md-4 offset-md-2" id="confirmPasswordForm" [formGroup]="confirmPasswordForm" (ngSubmit)="onPasswordSubmit()">
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <label>Current Password</label>
+                                                <input [type]="CurrentpasswordHidden ? 'password' : 'text'" maxlength="" class="form-control inline-control" formControlName="currentPassword" placeholder="Fill Current Password">
+                                                <div class="show-password">
+                                                    <i class="far " (click)="toggleVisible('current')" [ngClass]="{'fa-eye': !CurrentpasswordHidden, 'fa-eye-slash': CurrentpasswordHidden}"></i>
+                                                </div>
+                                                <div *ngIf="submitted && pf.currentPassword.errors">
+                                                    <error-label *ngIf="pf.currentPassword.errors.required" [control]="pf.currentPassword"></error-label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <label>New Password</label>
+                                                <input [type]="NewpasswordHidden ? 'password' : 'text'" maxlength="" class="form-control inline-control" id="password" formControlName="password" placeholder="Fill New Password">
+                                                <div class="show-password">
+                                                    <i class="far " (click)="toggleVisible('new')" [ngClass]="{'fa-eye': !NewpasswordHidden, 'fa-eye-slash': NewpasswordHidden}"></i>
+                                                </div>
+                                                <div *ngIf="submitted && pf.password.errors">
+                                                    <error-label *ngIf="pf.password.errors.required" [control]="pf.password"></error-label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default">
+                                                <label>Confirm Password</label>
+                                                <input [type]="ConfirmpasswordHidden ? 'password' : 'text'" maxlength="" class="form-control inline-control" formControlName="confirmPassword" placeholder="Fill Confirm Password">
+                                                <div class="show-password">
+                                                    <i class="far " (click)="toggleVisible('confirm')" [ngClass]="{'fa-eye': !ConfirmpasswordHidden, 'fa-eye-slash': ConfirmpasswordHidden}"></i>
+                                                </div>
+                                                <div *ngIf="submitted && pf.confirmPassword.errors">
+                                                    <error-label *ngIf="pf.confirmPassword.errors.required" [control]="pf.confirmPassword"></error-label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mt-3 mb-3 col-md-12">
+                                            <app-submit-button [submitted]="button">Update Password</app-submit-button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!--  <div class="tab-pane fade" [ngClass]="{ active: subVisible,  show: subVisible }" id="password-tab" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                            <div class="row">
+                                <div class="col-md-5 offset-md-2">
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            Company Name
+                                        </div>
+                                        <div class="col-md-8 sub-text">
+                                            {{ mysubDetails?.name }}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <label>Contact Name</label>
+                                        </div>
+                                        <div class="col-md-8 sub-text">
+                                            {{ mysubDetails?.contactName }}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <label>Email</label>
+                                        </div>
+                                        <div class="col-md-8 sub-text">
+                                            {{ mysubDetails?.email }}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <label>Package Name</label>
+                                        </div>
+                                        <div class="col-md-8 sub-text">
+                                            {{ mysubDetails?.package?.name }}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <label>Total User Count</label>
+                                        </div>
+                                        <div class="col-md-8 sub-text">
+                                            {{ mysubDetails?.userCount }}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <label>Expiry At</label>
+                                        </div>
+                                        <div class="col-md-8 sub-text">
+                                            {{ mysubDetails?.expireAt | date :'mediumDate' }}
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-3 mb-3 col-md-12">
+                                        <app-submit-button [routerLink]="['/upgrade/package']" routerLinkActive="router-link-active">Upgrade now</app-submit-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

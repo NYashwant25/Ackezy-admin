@@ -1,0 +1,6 @@
+<button type="submit" class="btn btn-secondary btn-rounded btn-login" [disabled]="submitted">
+    &nbsp;<i *ngIf="submitted" class="fas fa-spinner fa-spin"></i> &nbsp;
+    <span>
+        <ng-content></ng-content>
+    </span> &nbsp;
+</button>

@@ -1,0 +1,132 @@
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">{{title}}</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a routerLink="/dashboard">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a>{{ title }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row p-2 filter-cont mb-4">
+                        <div class="ml-auto">
+                            <button class="btn btn-secondary btn-round" id="addModalOpen" (click)="createData(editModal)">
+                                <i class="fa fa-plus"></i>
+                                &nbsp;&nbsp;&nbsp;Add Department
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="record-table" [dtOptions]="dtOptions" datatable class="display table table-striped table-hover w-100 table-head-bg-secondary" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Company</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="departmentist?.length != 0">
+                                    <tr *ngFor="let data of departmentist">
+                                        <td>{{ data.name | capitalize }}</td>
+                                        <td>{{ data.description }}</td>
+                                        <td>{{ data.companyName | capitalize }}</td>
+                                        <td>
+                                            <span class="badge badge-pill badge-success" *ngIf="data.IsActive == 1">Active</span>
+                                            <span class="badge badge-pill badge-warning" *ngIf="data.IsActive == 0">Inactive</span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group datatable-dropdown">
+                                                <button class="btn btn-link btn-secondary" (click)="editDetail(editModal,data._id)"><i class="fa fa-edit"></i></button>
+                                                <button class="btn btn-link btn-danger" (click)="deleteConfirmation(data._id)"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="departmentist?.length == 0">
+                                    <tr>
+                                        <td colspan="5" class="no-data-available text-center">No matching records found</td>
+                                    </tr>
+                                <tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal -->
+<ng-template #editModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{ editing ? "Edit" : "Add" }} Department</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="row form" *ngIf="requestDetail" id="departForm" #departForm="ngForm" novalidate>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label class="text-secondary">Name</label>
+                                <input type="text" name="name" required [(ngModel)]="departData.name" #name="ngModel" class="form-control" placeholder="Name">
+                                <div *ngIf="name.invalid && (name.dirty || name.touched)">
+                                    <label class="error">Name is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">Status</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="IsActive" required [(ngModel)]="departData.IsActive" #IsActive="ngModel" [items]="statusData" bindLabel="name" [clearable]="false" bindValue="id" placeholder="Status"></ng-select>
+                                <div *ngIf="IsActive.invalid && (IsActive.dirty || IsActive.touched)">
+                                    <label class="error">Status is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label class="text-secondary">Description</label>
+                                <input type="text" name="description" required [(ngModel)]="departData.description" #description="ngModel" class="form-control" placeholder="Description..">
+                                <div *ngIf="description.invalid && (description.dirty || description.touched)">
+                                    <label class="error">Description is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default dropdown">
+                                <label class="text-secondary">Head</label>
+                                <ng-select class="form-control floating-input input-border-bottom pl-1 pr-1 pb-0 pt-0" name="head" required [(ngModel)]="departData.head" #head="ngModel" [items]="usertist" bindLabel="firstName" [clearable]="false" bindValue="_id" placeholder="Status"></ng-select>
+                                <div *ngIf="head.invalid && (head.dirty || head.touched)">
+                                    <label class="error">Head is Required</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark btn-rounded" (click)="setsubmit()" (click)="modal.close('Close click')">Close</button>
+                    <app-submit-button [submitted]="button" (click)="updateRequest(departForm)">{{editing? "Update" : "Add" }}</app-submit-button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

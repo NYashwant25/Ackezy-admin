@@ -1,0 +1,162 @@
+<div class="page-inner">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+                <div>
+                    <h2 class=" pb-2 fw-bold">Dashboard</h2>
+                </div>
+            </div>
+            <div class="row row-card-no-pd mt--2">
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-round">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="far fa-file-word text-secondary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <a routerLink="/project/list" class="">
+                                            <p class="card-category">Documents</p>
+                                        </a>
+                                        <h4 class="card-title">{{dashboard?.docCount}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-round">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="fas fa-building text-secondary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <a routerLink="/riglocation/list" class="">
+                                            <p class="card-category">Company</p>
+                                        </a>
+                                        <h4 class="card-title">{{dashboard?.companyCount}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="far fa-building text-secondary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <a routerLink="/camera/list">
+                                            <p class="card-category">Departments</p>
+                                        </a>
+                                        <h4 class="card-title">{{dashboard?.departCount}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="fas fa-user-tie text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <a routerLink="/user/list">
+                                            <p class="card-category">Users</p>
+                                        </a>
+                                        <h4 class="card-title"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <div class="row row-card-no-pd mt--2">
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="fas fa-user text-secondary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <a routerLink="/user/list">
+                                            <p class="card-category">Users</p>
+                                        </a>
+                                        <h4 class="card-title">{{dashboard?.userCount-1}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="fas fa-user text-secondary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <a routerLink="/user/list">
+                                            <p class="card-category">Corporate User</p>
+                                        </a>
+                                        <h4 class="card-title">{{dashboard?.corpouserCount}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="fas fa-user text-secondary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                        <a routerLink="/meeting/list">
+                                            <p class="card-category">Non Corporate User</p>
+                                        </a>
+                                        <h4 class="card-title">{{dashboard?.noncorpouserCount}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
